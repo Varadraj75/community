@@ -14,24 +14,16 @@ jobs:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
       - name: Create episode.json file
         run: |
-          # Get the video ID from the workflow_dispatch input.
           video_id="${{ github.event.inputs.video_id }}"
-          
-          # Create episode.json content with the video ID
           json_content="{\"id\": \"${video_id}\"}"
-          
-          # Write the content to episode.json in the workspace directory
           echo "${json_content}" > episode.json
-
-          # Verify the content was written successfully
           cat episode.json
       - name: Upload Episode from YouTube To Spotify for Podcasters
-        # Pinned to v2.5.0 due to npm "Missing script: start" error in v2.6.0
-        uses: Schroedinger-Hat/youtube-to-spotify@601d281daadd2c210649aed350520a58cfad35eb # v2.5.0
+        uses: Schroedinger-Hat/youtube-to-spotify@97346df423b2c37e6334b5cae17dbbe14434d8a9 # v2.6.0
         env:
-          SPOTIFY_EMAIL: ${{ secrets.ANCHOR_EMAIL }}
-          SPOTIFY_PASSWORD: ${{ secrets.ANCHOR_PASSWORD }}
+          SPOTIFY_EMAIL: ${{ secrets.SPOTIFY_EMAIL }}
+          SPOTIFY_PASSWORD: ${{ secrets.SPOTIFY_PASSWORD }}
           EPISODE_PATH: /github/workspace
           URL_IN_DESCRIPTION: true
           LOAD_THUMBNAIL: true
-          POSTPROCESSOR_ARGS: 'ffmpeg:-ac 1'
+          POSTPROCESSOR_ARGS: 'ExtractAudio+ffmpeg:-ac 1'
